@@ -1,0 +1,22 @@
+# Local database credentials
+/config/db.php
+
+# Environment secrets
+.env
+.env.*
+
+# Dependencies and generated files
+/vendor/
+/node_modules/
+/.cache/
+
+# Logs and backups
+*.log
+*.sql.bak
+*.zip
+/backups/
+
+# Editor and operating-system files
+.vscode/
+.DS_Store
+Thumbs.db
