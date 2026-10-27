@@ -70,3 +70,27 @@ CREATE TABLE IF NOT EXISTS `savings_goals` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+-- Wishlist Items (0/1 Knapsack budget optimiser)
+CREATE TABLE IF NOT EXISTS `wishlist_items` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `name` VARCHAR(150) NOT NULL,
+  `cost` DECIMAL(12, 2) NOT NULL,
+  `priority` INT NOT NULL DEFAULT 5,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_wishlist_user` (`user_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Directed IOUs (graph + greedy debt simplification)
+CREATE TABLE IF NOT EXISTS `debts` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `debtor` VARCHAR(100) NOT NULL,
+  `creditor` VARCHAR(100) NOT NULL,
+  `amount` DECIMAL(12, 2) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_debts_user` (`user_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;

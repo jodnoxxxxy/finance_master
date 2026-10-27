@@ -64,6 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+            // Never let one user's undo/redo history leak into another session.
+            unset($_SESSION['undo_stack'], $_SESSION['redo_stack'], $_SESSION['wishlist_budget']);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_currency'] = $user['currency'];

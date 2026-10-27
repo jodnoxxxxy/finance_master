@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/auth_check.php';
 require_once 'config/db.php';
+require_once 'dsa/Sorting.php';
 
 $userId = $_SESSION['user_id'];
 $currency = $_SESSION['user_currency'] ?? '₹';
@@ -32,9 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-$stmt = $pdo->prepare("SELECT * FROM savings_goals WHERE user_id = ? ORDER BY deadline ASC");
+$stmt = $pdo->prepare("SELECT * FROM savings_goals WHERE user_id = ?");
 $stmt->execute([$userId]);
 $goals = $stmt->fetchAll();
+$goals = Sorting::sortBy($goals, 'deadline', 'ASC', 'merge');
 ?>
 <?php include 'includes/header.php'; ?>
 

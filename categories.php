@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/auth_check.php';
 require_once 'config/db.php';
+require_once 'dsa/Sorting.php';
 
 $userId = $_SESSION['user_id'];
 $msg = '';
@@ -31,9 +32,13 @@ if (isset($_GET['delete'])) {
     }
 }
 
-$stmt = $pdo->prepare("SELECT * FROM categories WHERE user_id = ? ORDER BY type, name");
+$stmt = $pdo->prepare("SELECT * FROM categories WHERE user_id = ?");
 $stmt->execute([$userId]);
 $categories = $stmt->fetchAll();
+$categories = Sorting::mergeSort($categories, static function (array $a, array $b): int {
+    $byType = strcmp((string)$a['type'], (string)$b['type']);
+    return $byType !== 0 ? $byType : strcasecmp((string)$a['name'], (string)$b['name']);
+});
 ?>
 <?php include 'includes/header.php'; ?>
 
